@@ -159,7 +159,7 @@ class Square {
 This is valid code, but what we've done is load our `constructor` with more
 calculations.
 
-The main benefits to using `get` is that your `area` calculation isn't actually
+The main benefit to using `get` is that your `area` calculation isn't actually
 run until it is accessed. The 'cost' of calculating is offset, and may not be
 called at all. While our computers can make short work of this example, there
 are times when we need to perform calculations that are CPU intensive, sometimes
@@ -190,15 +190,19 @@ square.sideLength = 10;
 square.area; // => 25
 ```
 
-Since `area` is only calculated in the beginning, if `sideLength` is modified,
+If `area` is only calculated in the beginning and `sideLength` is then modified,
 `area` will no longer be accurate.
 
 ## Define `set` Keyword in JavaScript Class Context
 
-Using `get` to create a pseudo-prototype is only half the story, since it is
+Using `get` to create a pseudo-property is only half the story, since it is
 only used for retrieving data from an instance. To change data, we have `set`.
 
-In the previous section we used `get` in the `Square` `class`:
+The `set` keyword allows us to write a method that interacts like a property
+being assigned a value. By adding it in conjunction with a `get`, we can
+create a 'reassignable' pseudo-property.
+
+For example, in the previous section we used `get` in the `Square` `class`:
 
 ```js
 class Square {
@@ -212,7 +216,7 @@ class Square {
 }
 ```
 
-This allowed us to do the following:
+This allowed us to retrieve the area of a Square instance like so:
 
 ```js
 let square = new Square(5);
@@ -220,25 +224,15 @@ square.sideLength; // => 5
 square.area; // => 25
 ```
 
-In the `Square` `class`, we only have one real property,
-`this.sideLength`. If we want to change that directly, we can reassign it:
+If we change `square.sideLength`, `sqaure.area` will update accordingly:
 
 ```js
-let square = new Square(5);
-square.sideLength; // => 5
-square.area; // => 25
 square.sideLength = 10;
-```
-
-Which will change the value returned by `area`:
-
-```js
 square.area; // => 100
 ```
 
-Although `area` looks and behaves like a property, we can't _assign_ it a new
-value. To make `area` fully act like a real property, we can create both `get`
-and `set` methods for it:
+However, we can't _assign_ `area` a new value. To make `area` fully act like a
+real property, we create both `get` and `set` methods for it:
 
 ```js
 class Square {
@@ -271,9 +265,8 @@ square.area; // => 64
 We can now interact with `area` as though it is a modifiable property, even
 though `area` is derived.
 
-Using `set`, we can set up _indirect_ control to real properties. From the
-outside, it looks like a property is being set, but behind the scenes, we can
-define what we want to happen, including applying conditional statements:
+From the outside, it looks like a property is being set, but behind the scenes,
+we can define what we want to happen, including applying conditional statements:
 
 ```js
 set area(newArea) {
@@ -285,13 +278,70 @@ set area(newArea) {
 }
 ```
 
-Using `set` works well when we want to treat properties as private. Since
-'private' properties aren't supposed to be directly modified, `set` can act as
-an intermediate step.
+Creating pseudo-properties this way enables us to finely tune how data can be
+both accessed and modified. In using `get` and `set`, we are designing the
+interface for our `class`.
+
+#### Using `get` and `set` with 'Private' Properties
+
+You may remember, though that in JavaScript, properties are exposed. That is,
+any property can be reassigned from outside. Here is where `get` and `set`
+really shine. Although there is no official 'private' property yet,
+an underscore at the beginning of a property is commonly used to indicate that
+method should not be directly modified. With `get` and `set`, we can define
+the 'public' facing methods for updating a 'private' property:
+
+```js
+class Square {
+	constructor(sideLength) {
+		this._sideLength = sideLength;
+	}
+
+	get sideLength() {
+		this._sideLength;
+	}
+
+	set sideLength(sideLength) {
+		this._sideLength = sideLength;
+	}
+}
+```
+
+A square's side can't have negative length. Now with our pseudo-property in
+place, we write code to make sure that `_sideLength` is always valid, both
+when an instance property is created and when it is modified:
+
+```js
+class Square {
+	constructor(sideLength) {
+		if (sideLength > 0) {
+			this._sideLength = sideLength;
+		} else {
+			throw new Error('A Square cannot have negative side length');
+		}
+	}
+
+	get sideLength() {
+		this._sideLength;
+	}
+
+	set sideLength(sideLength) {
+		if (sideLength > 0) {
+			this._sideLength = sideLength;
+		} else {
+			throw new Error('A Square cannot have negative side length');
+		}
+	}
+}
+```
+
+We could always extract that duplicate code into a helper method, but the take
+away here is the design. We've designed our `Square` `class`es to be a little
+more resistant to unwanted changes that might introduce bugs.
 
 Stepping away from `Squares` for a moment, let's consider an example with
 `String` properties. Imagine we want to build a `Student` class. The class
-takes in a students' first and last name, but we are tasked with making sure
+takes in a students' first and last name. We are tasked with making sure
 names do not have any non-alphanumeric characters except for those that appear
 in names. This is sometimes referred to as _sanitizing_ text.
 
@@ -331,28 +381,39 @@ student.firstName = 'Hea@)@(!$)ther';
 student.firstName; // => 'Heather'
 ```
 
-In this `Student` class, we've set up a pseudo property, `firstName`, which
+In this `Student` class, we've set up a pseudo-property, `firstName`, which
 refers to a 'private' property `_firstName`. We've also included a `sanitize()`
-method that removes any non alpha-numeric characters except those that commonly
-appear in names.
+method that removes any non alpha-numeric characters except `-` and `'`.
 
 Because we are using `set` and a 'private' property, we can call `sanitize()`
 when a `Student` instance is constructed, _or_ when we try to modify
-`_firstName`. This would not be possible if we were modifying a real
-property directly!
+`_firstName`.
 
-With `get` and `set` we can fine tune exactly how we want our data to be
-accessed and changed.
+## When to Use Methods Over `get` and `set`
+
+With `get` and `set`, we can fine tune exactly how we want our data to be
+accessed and changed. Methods, however, can achieve the same results, so
+which should we use?
+
+When to use `get` and `set`:
+
+- To represent a dynamically calculated or derived value as a pseudo-property
+- To clearly define the input and output, the _interface_, of a `class`
+- To indirectly control private properties
+
+Strictly using standard methods will work, but the value we receive from using
+`get` and `set` is in design. We can use them to create more efficient, better
+organized `class`es.
 
 ## Conclusion
 
 In the Object Oriented JavaScript world, we have a variety of ways to build our
 `class`es. As we continue to learn about OO JS, we will see that this
 flexibility is important - it allows us to design many `class`es that work
-together, each serving their own specific purpose, entirely customized.
+together, each serving their own specific purpose that we have defined.
 
 ## Resources
 
-- [`get`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
-- [`set`]:
-- [static methods]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
+- [`get`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get)
+- [`set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set)
+- [static methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static)
