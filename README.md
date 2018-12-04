@@ -391,19 +391,25 @@ when a `Student` instance is constructed, _or_ when we try to modify
 
 ## When to Use Methods Over `get` and `set`
 
-With `get` and `set`, we can fine tune exactly how we want our data to be
-accessed and changed. Methods, however, can achieve the same results, so
-which should we use?
+Although `get` and `set` change the way in which we interact with a `class`, 
+normal instance methods can do everything that `get` and `set` can do. So, 
+which should we use and when? JavaScript itself is indifferent.
 
-When to use `get` and `set`:
+With `get` and `set`, while we don't gain any sort of extra functionality,
+we gain the ability to _differentiate_ between behaviors. **We can use `get`
+and `set` whenever we are handling input or output of a `class`**. We are, 
+in essence, creating the _public interface_ of the `class`. We can treat this 
+interface as a menu of sorts.. `get` and `set` methods are the ways in which 
+_other_ classes and code _should_ utilize this `class`. 
 
-- To represent a dynamically calculated or derived value as a pseudo-property
-- To clearly define the input and output, the _interface_, of a `class`
-- To indirectly control private properties
+Using this design, all remaining methods can be considered _private_. They 
+don't deal with input and output; they are only used internally as helper 
+methods.
 
-Strictly using standard methods will work, but the value we receive from using
-`get` and `set` is in design. We can use them to create more efficient, better
-organized `class`es.
+It is important to note that in JavaScript currently, we can _always_ order 
+off the menu. All `class` methods and properties are exposed for use 
+'publicly'. Using `get` and `set` in this way is purely design. In designing
+this way, however, we produce better organized, easier to understand `class`es.
 
 ## Conclusion
 
