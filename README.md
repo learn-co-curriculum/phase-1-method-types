@@ -13,13 +13,13 @@ methods:
 
 ```js
 class Square {
-	constructor(sideLength) {
-		this.sideLength = sideLength;
-	}
+  constructor(sideLength) {
+    this.sideLength = sideLength;
+  }
 
-	area() {
-		return this.sideLength * this.sideLength;
-	}
+  area() {
+    return this.sideLength * this.sideLength;
+  }
 }
 ```
 
@@ -53,17 +53,17 @@ Methods can be called from inside other methods just like properties:
 
 ```js
 class Square {
-	constructor(sideLength) {
-		this.sideLength = sideLength;
-	}
+  constructor(sideLength) {
+    this.sideLength = sideLength;
+  }
 
-	area() {
-		return this.sideLength * this.sideLength;
-	}
+  area() {
+    return this.sideLength * this.sideLength;
+  }
 
-	areaMessage() {
-		return `The area of this square is ${this.area()}`;
-	}
+  areaMessage() {
+    return `The area of this square is ${this.area()}`;
+  }
 }
 square.area(); // => 25
 square.areaMessage(); // => LOG: The area of this square is 25
@@ -83,13 +83,13 @@ stores a series of math related methods:
 
 ```js
 class CommonMath {
-	static triple(number) {
-		return number * number * number;
-	}
+  static triple(number) {
+    return number * number * number;
+  }
 
-	static findHypotenuse(a, b) {
-		return Math.sqrt(a * a + b * b);
-	}
+  static findHypotenuse(a, b) {
+    return Math.sqrt(a * a + b * b);
+  }
 }
 ```
 
@@ -122,13 +122,13 @@ us to write a method that interacts like a property. To use `get`, write a
 
 ```js
 class Square {
-	constructor(sideLength) {
-		this.sideLength = sideLength;
-	}
+  constructor(sideLength) {
+    this.sideLength = sideLength;
+  }
 
-	get area() {
-		return this.sideLength * this.sideLength;
-	}
+  get area() {
+    return this.sideLength * this.sideLength;
+  }
 }
 ```
 
@@ -149,10 +149,10 @@ same result:
 
 ```js
 class Square {
-	constructor(sideLength) {
-		this.sideLength = sideLength;
-		this.area = sideLength * sideLength;
-	}
+  constructor(sideLength) {
+    this.sideLength = sideLength;
+    this.area = sideLength * sideLength;
+  }
 }
 ```
 
@@ -179,10 +179,10 @@ values, otherwise we will run in to issues like this:
 
 ```js
 class Square {
-	constructor(sideLength) {
-		this.sideLength = sideLength;
-		this.area = sideLength * sideLength;
-	}
+  constructor(sideLength) {
+    this.sideLength = sideLength;
+    this.area = sideLength * sideLength;
+  }
 }
 let square = new Square(5);
 square.area; // => 25
@@ -206,13 +206,13 @@ For example, in the previous section we used `get` in the `Square` `class`:
 
 ```js
 class Square {
-	constructor(sideLength) {
-		this.sideLength = sideLength;
-	}
+  constructor(sideLength) {
+    this.sideLength = sideLength;
+  }
 
-	get area() {
-		return this.sideLength * this.sideLength;
-	}
+  get area() {
+    return this.sideLength * this.sideLength;
+  }
 }
 ```
 
@@ -236,17 +236,17 @@ real property, we create both `get` and `set` methods for it:
 
 ```js
 class Square {
-	constructor(sideLength) {
-		this.sideLength = sideLength;
-	}
+  constructor(sideLength) {
+    this.sideLength = sideLength;
+  }
 
-	get area() {
-		return this.sideLength * this.sideLength;
-	}
+  get area() {
+    return this.sideLength * this.sideLength;
+  }
 
-	set area(newArea) {
-		this.sideLength = Math.sqrt(newArea);
-	}
+  set area(newArea) {
+    this.sideLength = Math.sqrt(newArea);
+  }
 }
 ```
 
@@ -293,17 +293,17 @@ the 'public' facing methods for updating a 'private' property:
 
 ```js
 class Square {
-	constructor(sideLength) {
-		this._sideLength = sideLength;
-	}
+  constructor(sideLength) {
+    this._sideLength = sideLength;
+  }
 
-	get sideLength() {
-		this._sideLength;
-	}
+  get sideLength() {
+    this._sideLength;
+  }
 
-	set sideLength(sideLength) {
-		this._sideLength = sideLength;
-	}
+  set sideLength(sideLength) {
+    this._sideLength = sideLength;
+  }
 }
 ```
 
@@ -313,25 +313,25 @@ when an instance property is created and when it is modified:
 
 ```js
 class Square {
-	constructor(sideLength) {
-		if (sideLength > 0) {
-			this._sideLength = sideLength;
-		} else {
-			throw new Error('A Square cannot have negative side length');
-		}
-	}
+  constructor(sideLength) {
+    if (sideLength > 0) {
+      this._sideLength = sideLength;
+    } else {
+      throw new Error('A Square cannot have negative side length');
+    }
+  }
 
-	get sideLength() {
-		this._sideLength;
-	}
+  get sideLength() {
+    this._sideLength;
+  }
 
-	set sideLength(sideLength) {
-		if (sideLength > 0) {
-			this._sideLength = sideLength;
-		} else {
-			throw new Error('A Square cannot have negative side length');
-		}
-	}
+  set sideLength(sideLength) {
+    if (sideLength > 0) {
+      this._sideLength = sideLength;
+    } else {
+      throw new Error('A Square cannot have negative side length');
+    }
+  }
 }
 ```
 
@@ -350,28 +350,28 @@ is created as well as later, if the property needs to change:
 
 ```js
 class Student {
-	constructor(firstName, lastName) {
-		this._firstName = this.sanitize(firstName);
-		this._lastName = this.sanitize(lastName);
-	}
+  constructor(firstName, lastName) {
+    this._firstName = this.sanitize(firstName);
+    this._lastName = this.sanitize(lastName);
+  }
 
-	get firstName() {
-		return this.capitalize(this._firstName);
-	}
+  get firstName() {
+    return this.capitalize(this._firstName);
+  }
 
-	set firstName(firstName) {
-		this._firstName = this.sanitize(firstName);
-	}
+  set firstName(firstName) {
+    this._firstName = this.sanitize(firstName);
+  }
 
-	capitalize(string) {
-		// capitalizes first letter
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
+  capitalize(string) {
+    // capitalizes first letter
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
-	sanitize(string) {
-		// removes any non alpha-numeric characters except dash and single quotes (apostrophes)
-		return string.replace(/[^A-Za-z0-9-']+/g, '');
-	}
+  sanitize(string) {
+    // removes any non alpha-numeric characters except dash and single quotes (apostrophes)
+    return string.replace(/[^A-Za-z0-9-']+/g, '');
+  }
 }
 
 let student = new Student('Carr@ol-Ann', ')Freel*ing');
