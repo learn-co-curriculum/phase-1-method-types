@@ -224,7 +224,7 @@ square.sideLength; // => 5
 square.area; // => 25
 ```
 
-If we change `square.sideLength`, `sqaure.area` will update accordingly:
+If we change `square.sideLength`, `square.area` will update accordingly:
 
 ```js
 square.sideLength = 10;
