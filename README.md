@@ -165,7 +165,7 @@ called at all. While our computers can make short work of this example, there
 are times when we need to perform calculations that are CPU intensive, sometimes
 referred to as a 'costly' or 'expensive' processes.
 
-If included in the `constructor`, a expensive process will be called every
+If included in the `constructor`, an expensive process will be called every
 time a new instance of a `class` is created. When dealing with many instances,
 this can result in decreased performance.
 
