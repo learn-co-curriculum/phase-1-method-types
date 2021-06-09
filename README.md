@@ -1,4 +1,4 @@
-# Building Cells: Method Types
+# Method Types
 
 ## Learning Goals
 
