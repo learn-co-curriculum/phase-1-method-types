@@ -8,7 +8,7 @@
 
 ## Introduction
 
-So far, we've seen some examples of `class`es that have their own custom
+So far, we've seen some examples of classes that have their own custom
 methods:
 
 ```js
@@ -24,16 +24,16 @@ class Square {
 ```
 
 It turns out, however, there are four different types of methods we can write in
-a `class`: the standard 'instance' method we've seen already, _static_, getter
+a class: the standard 'instance' method we've seen already, _static_, getter
 and setter methods. Each of these behaves differently, and this variety provides
-us with flexibility in how we design the behaviors of our `class`es.
+us with flexibility in how we design the behaviors of our classes.
 
 In this lesson, we're going to briefly look at each type of method and consider
 some use cases for each.
 
 ## Standard Methods
 
-Most `class` methods you will see use the following, standard syntax:
+Most class methods you will see use the following, standard syntax:
 
 ```js
 area() {
@@ -41,11 +41,11 @@ area() {
 }
 ```
 
-These methods are available to any instance of the `class` they belong to,
+These methods are available to any instance of the class they belong to,
 as we've seen:
 
 ```js
-let square = new Square(5);
+const square = new Square(5);
 square.area(); // => 25
 ```
 
@@ -65,21 +65,22 @@ class Square {
     return `The area of this square is ${this.area()}`;
   }
 }
+const square = new Square(5);
 square.area(); // => 25
 square.areaMessage(); // => LOG: The area of this square is 25
 ```
 
-In the `class` above, we can access `area()` directly, or use it to provide
+In the class above, we can access `area()` directly, or use it to provide
 dynamic content for other methods. These methods are the most common - they act
-as the 'behaviors' of a `class` instance.
+as the 'behaviors' of a class instance.
 
 ## Static Methods
 
-Static methods are `class` level methods - they are not callable on instances of
-a `class`, only the `class` itself. These are often used in 'utility' `class`es -
-`class`es that encapsulate a set of related methods but don't need to be
-made into instances. For example, we could write a `CommonMath` `class` that
-stores a series of math related methods:
+Static methods are class level methods - they are not callable on instances of a
+class, only the class itself. These are often used in 'utility' classes -
+classes that encapsulate a set of related methods but don't need to be made into
+instances. For example, we could write a `CommonMath` class that stores a series
+of math related methods:
 
 ```js
 class CommonMath {
@@ -96,29 +97,29 @@ class CommonMath {
 To access, these static methods:
 
 ```js
-let num = CommonMath.triple(3);
+const num = CommonMath.triple(3);
 num; // => 27
-let c = CommonMath.findHypotenuse(3, 4);
+const c = CommonMath.findHypotenuse(3, 4);
 c; // => 5
 ```
 
-This sort of `class` might be useful in many different situations, but we don't
+This sort of class might be useful in many different situations, but we don't
 ever need an _instance_ of it.
 
 ## Define `get` Keyword in JavaScript Class Context
 
-Often, when writing methods for a `class`, we want to return information derived
-from that instance's properties. In the Square `class` example earlier, `area()`
+Often, when writing methods for a class, we want to return information derived
+from that instance's properties. In the `Square` class example earlier, `area()`
 returns a calculation based on `this.sideLength`, and `areaMessage()` returns a
 `String`.
 
 In modern JavaScript, new syntax, `get`, has been introduced. The `get` keyword
-is used in `class`es for methods which serve the specific purpose of
-retrieving data from an instance.
+is used in classes for methods which serve the specific purpose of retrieving
+data from an instance.
 
 The `get` keyword turns a method into a 'pseudo-property', that is - it allows
-us to write a method that interacts like a property. To use `get`, write a
-`class` method like normal, preceded by `get`:
+us to write a method that interacts like a property. To use `get`, write a class
+method like normal, preceded by `get`:
 
 ```js
 class Square {
@@ -136,7 +137,7 @@ As a result of this, `area` will now be available as though it is a
 property just like `sideLength`:
 
 ```js
-let square = new Square(5);
+const square = new Square(5);
 square.sideLength; // => 5
 square.area; // => 25
 ```
@@ -184,7 +185,7 @@ class Square {
     this.area = sideLength * sideLength;
   }
 }
-let square = new Square(5);
+const square = new Square(5);
 square.area; // => 25
 square.sideLength = 10;
 square.area; // => 25
@@ -202,7 +203,7 @@ The `set` keyword allows us to write a method that interacts like a property
 being assigned a value. By adding it in conjunction with a `get`, we can
 create a 'reassignable' pseudo-property.
 
-For example, in the previous section we used `get` in the `Square` `class`:
+For example, in the previous section we used `get` in the `Square` class:
 
 ```js
 class Square {
@@ -219,7 +220,7 @@ class Square {
 This allowed us to retrieve the area of a Square instance like so:
 
 ```js
-let square = new Square(5);
+const square = new Square(5);
 square.sideLength; // => 5
 square.area; // => 25
 ```
@@ -254,7 +255,7 @@ We can now 'set' the pseudo-property, `area`, and modify `this.sideLength` based
 on a reverse of the calculation we used in `get`:
 
 ```js
-let square = new Square(5);
+const square = new Square(5);
 square.sideLength; // => 5
 square.area; // => 25
 square.area = 64;
@@ -280,63 +281,63 @@ set area(newArea) {
 
 Creating pseudo-properties this way enables us to finely tune how data can be
 both accessed and modified. In using `get` and `set`, we are designing the
-interface for our `class`.
+interface for our class.
 
-#### Using `get` and `set` with 'Private' Properties
+### Using `get` and `set` with Private Fields
 
-You may remember, though that in JavaScript, properties are exposed. That is,
-any property can be reassigned from outside. Here is where `get` and `set`
-really shine. Although there is no official 'private' property yet,
-an underscore at the beginning of a property is commonly used to indicate that
-method should not be directly modified. With `get` and `set`, we can define
-the 'public' facing methods for updating a 'private' property:
+You may remember that in JavaScript, properties are public. That is, any
+property can be reassigned from outside. Here is where `get` and `set` really
+shine. With `get` and `set`, we can define the public facing methods for
+updating a private property:
 
 ```js
 class Square {
+  #sideLength;
   constructor(sideLength) {
-    this._sideLength = sideLength;
+    this.#sideLength = sideLength;
   }
 
   get sideLength() {
-    this._sideLength;
+    this.#sideLength;
   }
 
   set sideLength(sideLength) {
-    this._sideLength = sideLength;
+    this.#sideLength = sideLength;
   }
 }
 ```
 
-A square's side can't have negative length. Now with our pseudo-property in
-place, we write code to make sure that `_sideLength` is always valid, both
-when an instance property is created and when it is modified:
+A square's side length must be a positive value. Now with our private field in
+place, we write code to make sure that `#sideLength` is always valid, both when
+an instance property is created and when it is modified:
 
 ```js
 class Square {
+  #sideLength;
   constructor(sideLength) {
     if (sideLength > 0) {
-      this._sideLength = sideLength;
+      this.#sideLength = sideLength;
     } else {
-      throw new Error('A Square cannot have negative side length');
+      throw new Error("A square's side length must be a positive value");
     }
   }
 
   get sideLength() {
-    this._sideLength;
+    this.#sideLength;
   }
 
   set sideLength(sideLength) {
     if (sideLength > 0) {
-      this._sideLength = sideLength;
+      this.#sideLength = sideLength;
     } else {
-      throw new Error('A Square cannot have negative side length');
+      throw new Error("A square's side length must be a positive value");
     }
   }
 }
 ```
 
 We could always extract that duplicate code into a helper method, but the take
-away here is the design. We've designed our `Square` `class`es to be a little
+away here is the design. We've designed our `Square` classes to be a little
 more resistant to unwanted changes that might introduce bugs.
 
 Stepping away from `Squares` for a moment, let's consider an example with
@@ -350,17 +351,20 @@ is created as well as later, if the property needs to change:
 
 ```js
 class Student {
+  #firstName;
+  #lastName;
+
   constructor(firstName, lastName) {
-    this._firstName = this.sanitize(firstName);
-    this._lastName = this.sanitize(lastName);
+    this.#firstName = this.sanitize(firstName);
+    this.#lastName = this.sanitize(lastName);
   }
 
   get firstName() {
-    return this.capitalize(this._firstName);
+    return this.capitalize(this.#firstName);
   }
 
   set firstName(firstName) {
-    this._firstName = this.sanitize(firstName);
+    this.#firstName = this.sanitize(firstName);
   }
 
   capitalize(string) {
@@ -370,56 +374,55 @@ class Student {
 
   sanitize(string) {
     // removes any non alpha-numeric characters except dash and single quotes (apostrophes)
-    return string.replace(/[^A-Za-z0-9-']+/g, '');
+    return string.replace(/[^A-Za-z0-9-']+/g, "");
   }
 }
 
-let student = new Student('Carr@ol-Ann', ')Freel*ing');
-student; // => Student { _firstName: 'Carrol-Ann', _lastName: 'Freeling' }
+let student = new Student("Carr@ol-Ann", ")Freel*ing");
+student; // => Student { #firstName: 'Carrol-Ann', #lastName: 'Freeling' }
 
-student.firstName = 'Hea@)@(!$)ther';
+student.firstName = "Hea@)@(!$)ther";
 student.firstName; // => 'Heather'
 ```
 
 In this `Student` class, we've set up a pseudo-property, `firstName`, which
-refers to a 'private' property `_firstName`. We've also included a `sanitize()`
+refers to a private field `#firstName`. We've also included a `sanitize()`
 method that removes any non alpha-numeric characters except `-` and `'`.
 
-Because we are using `set` and a 'private' property, we can call `sanitize()`
-when a `Student` instance is constructed, _or_ when we try to modify
-`_firstName`.
+Because we are using `set` and a private field, we can call `sanitize()` when a
+`Student` instance is constructed, _or_ when we try to modify `#firstName`.
 
 ## When to Use Methods Over `get` and `set`
 
-Although `get` and `set` change the way in which we interact with a `class`, 
-normal instance methods can do everything that `get` and `set` can do. So, 
-which should we use and when? JavaScript itself is indifferent.
+Although `get` and `set` change the way in which we interact with a class,
+normal instance methods can do everything that `get` and `set` can do. So, which
+should we use and when? JavaScript itself is indifferent.
 
-With `get` and `set`, while we don't gain any sort of extra functionality,
-we gain the ability to _differentiate_ between behaviors. **We can use `get`
-and `set` whenever we are handling input or output of a `class`**. We are, 
-in essence, creating the _public interface_ of the `class`. We can treat this 
-interface as a menu of sorts.. `get` and `set` methods are the ways in which 
-_other_ classes and code _should_ utilize this `class`. 
+With `get` and `set`, while we don't gain any sort of extra functionality, we
+gain the ability to _differentiate_ between behaviors. **We can use `get` and
+`set` whenever we are handling input or output of a class**. We are, in essence,
+creating the _public interface_ of the class. We can treat this interface as a
+menu of sorts.. `get` and `set` methods are the ways in which _other_ classes
+and code _should_ utilize this class.
 
-Using this design, all remaining methods can be considered _private_. They 
-don't deal with input and output; they are only used internally as helper 
-methods.
+Using this design, all remaining methods can be considered _private_. They don't
+deal with input and output; they are only used internally as helper methods.
 
-It is important to note that in JavaScript currently, we can _always_ order 
-off the menu. All `class` methods and properties are exposed for use 
-'publicly'. Using `get` and `set` in this way is purely design. In designing
-this way, however, we produce better organized, easier to understand `class`es.
+It is important to note that in JavaScript currently, we can _always_ order off
+the menu. All class methods and properties are exposed for use 'publicly'. Using
+`get` and `set` in this way is purely design. In designing this way, however, we
+produce better organized, easier to understand classes.
 
 ## Conclusion
 
 In the Object Oriented JavaScript world, we have a variety of ways to build our
-`class`es. As we continue to learn about OO JS, we will see that this
-flexibility is important - it allows us to design many `class`es that work
-together, each serving their own specific purpose that we have defined.
+classes. As we continue to learn about OO JS, we will see that this flexibility
+is important - it allows us to design many classes that work together, each
+serving their own specific purpose that we have defined.
 
 ## Resources
 
 - [`get`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get)
 - [`set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set)
 - [static methods](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static)
+- [Working with private class features](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_With_Private_Class_Features)
